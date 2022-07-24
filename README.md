@@ -1,0 +1,2 @@
+# NJUPhysicsStork
+定期检查NJU物理学院等网站的最新通知等消息并获取
