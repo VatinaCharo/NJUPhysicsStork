@@ -18,9 +18,19 @@ object Utils {
         web.getNoticeList(Type.GraduateSchool.NOTICE_URL, Type.GraduateSchool)
     )
 
-    fun getNewNotice(oldPhyNotice: PhyNotice, web: WebClient) =
-        getPhyNotice(web).getNoticeList().minus(oldPhyNotice.getNoticeList().toSet()).sortedByDescending { it.time }
+    fun getNewNotice(oldPhyNotice: PhyNotice, web: WebClient): List<Notice> {
+        val newPhyNoticeList = getPhyNotice(web).getNoticeList()
+        val oldPhyNoticeUrlList = oldPhyNotice.getNoticeList().map { it.url }
+        return getNewNotice(oldPhyNoticeUrlList, newPhyNoticeList)
 
-    fun getNewNotice(oldGraNotice: GraNotice, web: WebClient) =
-        getGraNotice(web).noticeList.minus(oldGraNotice.noticeList.toSet()).sortedByDescending { it.time }
+    }
+
+    fun getNewNotice(oldGraNotice: GraNotice, web: WebClient): List<Notice> {
+        val newGraNoticeList = getGraNotice(web).noticeList
+        val oldGraNoticeUrlList = oldGraNotice.noticeList.map { it.url }
+        return getNewNotice(oldGraNoticeUrlList, newGraNoticeList)
+    }
+
+    private fun getNewNotice(oldUrlList: List<String>, newNoticeList: List<Notice>) =
+        newNoticeList.filter { !oldUrlList.contains(it.url) }.sortedByDescending { it.time }
 }

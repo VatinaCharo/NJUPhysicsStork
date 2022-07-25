@@ -5,11 +5,11 @@ plugins {
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.serialization") version kotlinVersion
 
-    id("net.mamoe.mirai-console") version "2.12.0"
+    id("net.mamoe.mirai-console") version "2.10.0"
 }
 
 group = "nju.eur3ka"
-version = "0.1.0"
+version = "1.0.0"
 
 
 repositories {
@@ -21,6 +21,8 @@ dependencies {
     testImplementation(kotlin("test"))
     implementation("net.sourceforge.htmlunit:htmlunit:2.63.0")
     implementation("org.jsoup:jsoup:1.15.2")
+//    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+//    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
 }
 
 tasks.test {
