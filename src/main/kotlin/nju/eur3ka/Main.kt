@@ -22,6 +22,7 @@ object PhyStork : KotlinPlugin(
     }
 }
 
+// 功能测试
 fun main() {
     val web = WebClient(BrowserVersion.CHROME).apply {
         options.apply {
