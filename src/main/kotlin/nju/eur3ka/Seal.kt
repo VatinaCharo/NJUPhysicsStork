@@ -1,3 +1,5 @@
+package nju.eur3ka
+
 sealed class Type {
     object PhysicsSchool : Type() {
         private const val PHYSICS_URL_PREFIX = "https://physics.nju.edu.cn/xwgg"

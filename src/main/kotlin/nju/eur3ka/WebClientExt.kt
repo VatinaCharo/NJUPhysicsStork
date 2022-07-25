@@ -1,5 +1,7 @@
-import Type.GraduateSchool
-import Type.PhysicsSchool
+package nju.eur3ka
+
+import nju.eur3ka.Type.GraduateSchool
+import nju.eur3ka.Type.PhysicsSchool
 import com.gargoylesoftware.htmlunit.WebClient
 import com.gargoylesoftware.htmlunit.html.HtmlPage
 import org.jsoup.Jsoup

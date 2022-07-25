@@ -1,3 +1,5 @@
+package nju.eur3ka
+
 data class Notice(
     val time: String,
     val title: String,
@@ -13,7 +15,16 @@ data class PhyNotice(
     val briefingList: List<Notice>,
     val publicityAreaList: List<Notice>,
     val campusPublicityAreaList: List<Notice>
-)
+) {
+    fun getNoticeList() =
+        conferenceList
+            .plus(reportList)
+            .plus(salonList)
+            .plus(announcementList)
+            .plus(briefingList)
+            .plus(publicityAreaList)
+            .plus(campusPublicityAreaList)
+}
 
 data class GraNotice(
     val noticeList: List<Notice>

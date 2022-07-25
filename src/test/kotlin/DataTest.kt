@@ -1,8 +1,11 @@
-import Type.GraduateSchool
-import Type.PhysicsSchool
+import nju.eur3ka.Type.GraduateSchool
+import nju.eur3ka.Type.PhysicsSchool
 import com.gargoylesoftware.htmlunit.BrowserVersion
 import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController
 import com.gargoylesoftware.htmlunit.WebClient
+import nju.eur3ka.GraNotice
+import nju.eur3ka.PhyNotice
+import nju.eur3ka.getNoticeList
 import kotlin.test.Test
 
 class DataTest {
