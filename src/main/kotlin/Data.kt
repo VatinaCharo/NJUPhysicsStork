@@ -1,11 +1,9 @@
-@kotlinx.serialization.Serializable
 data class Notice(
     val time: String,
     val title: String,
     val url: String
 )
 
-@kotlinx.serialization.Serializable
 data class PhyNotice(
     val conferenceList: List<Notice>,
     val reportList: List<Notice>,
@@ -17,7 +15,6 @@ data class PhyNotice(
     val campusPublicityAreaList: List<Notice>
 )
 
-@kotlinx.serialization.Serializable
 data class GraNotice(
     val noticeList: List<Notice>
 )
