@@ -17,10 +17,7 @@ import net.mamoe.mirai.console.plugin.jvm.reloadPluginConfig
 import net.mamoe.mirai.event.events.BotOnlineEvent
 import net.mamoe.mirai.event.globalEventChannel
 import net.mamoe.mirai.message.data.MessageChainBuilder
-import java.io.File
 import java.nio.charset.StandardCharsets
-import java.nio.file.Paths
-import kotlin.io.path.pathString
 
 object PhyStork : KotlinPlugin(
     JvmPluginDescription(
@@ -48,13 +45,8 @@ object PhyStork : KotlinPlugin(
     override fun onEnable() {
         // 加载配置文件
         reloadPluginConfig(Config)
-        // 检查缓存是否存在，不存在则创建
-        val cachePath = Paths.get("./cache/NJUPhysicsStork")
-        if (!cachePath.toFile().exists()) {
-            cachePath.toFile().mkdirs()
-        }
-        val phyCacheFile = File("${cachePath.pathString}/phy.json")
-        val graCacheFile = File("${cachePath.pathString}/gra.json")
+        val phyCacheFile = dataFolder.resolve("phy.json")
+        val graCacheFile = dataFolder.resolve("gra.json")
         phyNotice = if (phyCacheFile.exists()) {
             json.decodeFromString(phyCacheFile.readText(StandardCharsets.UTF_8))
         } else {
@@ -66,8 +58,8 @@ object PhyStork : KotlinPlugin(
             Utils.getGraNotice(web)
         }
         // 保存缓存
-        phyCacheFile.writeText(json.encodeToString(Utils.getPhyNotice(web)))
-        graCacheFile.writeText(json.encodeToString(Utils.getGraNotice(web)))
+        phyCacheFile.writeText(json.encodeToString(phyNotice))
+        graCacheFile.writeText(json.encodeToString(graNotice))
         // 获取到机器人实例并添加定时任务
         globalEventChannel().subscribeAlways<BotOnlineEvent> { event ->
             PhyStork.bot = event.bot
@@ -80,18 +72,27 @@ object PhyStork : KotlinPlugin(
                     val mcb = MessageChainBuilder()
                     Utils.getNewNotice(phyNotice, web)
                         .plus(Utils.getNewNotice(graNotice, web))
+                        .sortedByDescending { it.time }
                         .map {
                             "[${it.time}] ${it.title} /// ${it.url}\n"
                         }.forEach {
                             mcb.add(it)
                         }
                     val msg = mcb.asMessageChain()
-                    Config.groupIdList.forEach {
-                        PhyStork.bot.getGroup(it)?.sendMessage(msg)
+                    if (msg.isNotEmpty()) {
+                        logger.info("发现新通知")
+                        Config.groupIdList.forEach {
+                            PhyStork.bot.getGroup(it)?.sendMessage(msg)
+                        }
+                        // 更新缓存
+                        phyCacheFile.writeText(json.encodeToString(Utils.getPhyNotice(web)))
+                        phyNotice = json.decodeFromString(phyCacheFile.readText(StandardCharsets.UTF_8))
+                        graCacheFile.writeText(json.encodeToString(Utils.getGraNotice(web)))
+                        graNotice = json.decodeFromString(graCacheFile.readText(StandardCharsets.UTF_8))
+                        logger.info("更新phy和gra缓存")
+                    } else {
+                        logger.info("没有新的通知")
                     }
-                    // 更新缓存
-                    phyCacheFile.writeText(json.encodeToString(Utils.getPhyNotice(web)))
-                    graCacheFile.writeText(json.encodeToString(Utils.getGraNotice(web)))
                 }
             }
         }
